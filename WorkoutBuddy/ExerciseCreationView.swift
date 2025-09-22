@@ -74,19 +74,16 @@ struct ExerciseCreationView: View {
             Form {
                 Section("Exercise Details") {
                     TextField("Exercise name", text: $exerciseName)
+                        .autoSelectText()
                     
                     HStack {
                         Text("Rest between sets")
                         Spacer()
-                        TextField("60", value: $restSeconds, format: .number)
-                            .keyboardType(.numberPad)
-                            .multilineTextAlignment(.trailing)
-                            .frame(width: 60)
-                            .onReceive(NotificationCenter.default.publisher(for: UITextField.textDidBeginEditingNotification)) { obj in
-                                if let textField = obj.object as? UITextField {
-                                    textField.selectAll(nil)
-                                }
-                            }
+                        IntegerInputField(
+                            label: "Rest seconds",
+                            value: $restSeconds,
+                            placeholder: "60"
+                        )
                         Text("seconds")
                             .foregroundStyle(.secondary)
                     }
@@ -115,38 +112,30 @@ struct ExerciseCreationView: View {
                         HStack {
                             Text("Reps per set")
                             Spacer()
-                            TextField("10", value: $sameRepsValue, format: .number)
-                                .keyboardType(.numberPad)
-                                .multilineTextAlignment(.trailing)
-                                .frame(width: 60)
-                                .onReceive(NotificationCenter.default.publisher(for: UITextField.textDidBeginEditingNotification)) { obj in
-                                    if let textField = obj.object as? UITextField {
-                                        textField.selectAll(nil)
-                                    }
-                                }
+                            IntegerInputField(
+                                label: "Reps per set",
+                                value: $sameRepsValue,
+                                placeholder: "10"
+                            )
                         }
                     } else {
                         ForEach(0..<numberOfSets, id: \.self) { index in
                             HStack {
                                 Text("Set \(index + 1)")
                                 Spacer()
-                                TextField("10", value: Binding(
-                                    get: { customReps.indices.contains(index) ? customReps[index] : 10 },
-                                    set: { newValue in
-                                        while customReps.count <= index {
-                                            customReps.append(10)
+                                IntegerInputField(
+                                    label: "Set \(index + 1) reps",
+                                    value: Binding(
+                                        get: { customReps.indices.contains(index) ? customReps[index] : 10 },
+                                        set: { newValue in
+                                            while customReps.count <= index {
+                                                customReps.append(10)
+                                            }
+                                            customReps[index] = newValue
                                         }
-                                        customReps[index] = newValue
-                                    }
-                                ), format: .number)
-                                .keyboardType(.numberPad)
-                                .multilineTextAlignment(.trailing)
-                                .frame(width: 60)
-                                .onReceive(NotificationCenter.default.publisher(for: UITextField.textDidBeginEditingNotification)) { obj in
-                                    if let textField = obj.object as? UITextField {
-                                        textField.selectAll(nil)
-                                    }
-                                }
+                                    ),
+                                    placeholder: "10"
+                                )
                                 Text("reps")
                                     .foregroundStyle(.secondary)
                             }
@@ -166,15 +155,11 @@ struct ExerciseCreationView: View {
                         HStack {
                             Text("Weight increment")
                             Spacer()
-                            TextField("5.0", value: $sameWeightIncrement, format: .number)
-                                .keyboardType(.decimalPad)
-                                .multilineTextAlignment(.trailing)
-                                .frame(width: 80)
-                                .onReceive(NotificationCenter.default.publisher(for: UITextField.textDidBeginEditingNotification)) { obj in
-                                    if let textField = obj.object as? UITextField {
-                                        textField.selectAll(nil)
-                                    }
-                                }
+                            NumberInputField(
+                                label: "Weight increment",
+                                value: $sameWeightIncrement,
+                                placeholder: "5.0"
+                            )
                             Text("kg")
                                 .foregroundStyle(.secondary)
                         }
@@ -187,23 +172,19 @@ struct ExerciseCreationView: View {
                             HStack {
                                 Text("Set \(index + 1) → \(index + 2)")
                                 Spacer()
-                                TextField("5.0", value: Binding(
-                                    get: { customWeightIncrements.indices.contains(index) ? customWeightIncrements[index] : 5.0 },
-                                    set: { newValue in
-                                        while customWeightIncrements.count <= index {
-                                            customWeightIncrements.append(5.0)
+                                NumberInputField(
+                                    label: "Weight increment \(index + 1)",
+                                    value: Binding(
+                                        get: { customWeightIncrements.indices.contains(index) ? customWeightIncrements[index] : 5.0 },
+                                        set: { newValue in
+                                            while customWeightIncrements.count <= index {
+                                                customWeightIncrements.append(5.0)
+                                            }
+                                            customWeightIncrements[index] = newValue
                                         }
-                                        customWeightIncrements[index] = newValue
-                                    }
-                                ), format: .number)
-                                .keyboardType(.decimalPad)
-                                .multilineTextAlignment(.trailing)
-                                .frame(width: 80)
-                                .onReceive(NotificationCenter.default.publisher(for: UITextField.textDidBeginEditingNotification)) { obj in
-                                    if let textField = obj.object as? UITextField {
-                                        textField.selectAll(nil)
-                                    }
-                                }
+                                    ),
+                                    placeholder: "5.0"
+                                )
                                 Text("kg")
                                     .foregroundStyle(.secondary)
                             }
@@ -211,6 +192,7 @@ struct ExerciseCreationView: View {
                     }
                 }
             }
+            .dismissKeyboardOnTap()
             .navigationTitle(exercise == nil ? "Add Exercise" : "Edit Exercise")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

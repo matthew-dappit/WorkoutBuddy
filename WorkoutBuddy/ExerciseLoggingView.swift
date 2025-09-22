@@ -47,6 +47,7 @@ struct ExerciseLoggingView: View {
             entriesList
         }
         .padding()
+        .dismissKeyboardOnTap()
         .navigationTitle(template.name)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear { setupIfNeeded() }

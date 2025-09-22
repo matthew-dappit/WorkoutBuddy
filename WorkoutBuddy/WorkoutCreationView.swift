@@ -19,6 +19,7 @@ struct WorkoutCreationView: View {
                         .font(.headline)
                     TextField("Enter workout name", text: $workoutName)
                         .textFieldStyle(.roundedBorder)
+                        .autoSelectText()
                 }
                 .padding()
                 .background(Color(.systemGray6))
@@ -70,6 +71,7 @@ struct WorkoutCreationView: View {
                 }
                 .padding()
             }
+            .dismissKeyboardOnTap()
             .navigationTitle("Create Workout")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
