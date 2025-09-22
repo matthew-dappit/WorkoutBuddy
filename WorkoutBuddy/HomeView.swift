@@ -4,21 +4,37 @@ import SwiftData
 struct HomeView: View {
     var body: some View {
         NavigationStack {
-            VStack(spacing: 24) {
+            VStack(spacing: 20) {
                 Text("Workout Buddy")
                     .font(.largeTitle).bold()
 
-                NavigationLink("Log Workout") {
-                    WorkoutSelectView()
+                VStack(spacing: 16) {
+                    NavigationLink("Log Workout") {
+                        WorkoutSelectView()
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .font(.title3)
+                    
+                    HStack(spacing: 16) {
+                        NavigationLink("Create Workout") {
+                            WorkoutCreationView()
+                        }
+                        .buttonStyle(.bordered)
+                        .font(.callout)
+                        
+                        NavigationLink("Manage Workouts") {
+                            WorkoutManagementView()
+                        }
+                        .buttonStyle(.bordered)
+                        .font(.callout)
+                    }
+                    
+                    NavigationLink("History") {
+                        HistoryView()
+                    }
+                    .buttonStyle(.bordered)
+                    .font(.title3)
                 }
-                .buttonStyle(.borderedProminent)
-                .font(.title3)
-                
-                NavigationLink("History") {
-                    HistoryView()
-                }
-                .buttonStyle(.bordered)
-                .font(.title3)
 
                 Spacer()
             }
